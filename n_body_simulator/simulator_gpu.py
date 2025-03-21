@@ -1,4 +1,5 @@
-from .base_simulation import BaseNBodySimulation
+from .base_simulation import BaseNBodySimulation, calculate_acceleration_helper
+
 try:
     import cupy as cp
     xp = cp
@@ -18,7 +19,7 @@ class NBodySimulation(BaseNBodySimulation):
         self.accelerations[:] = 0
 
         for i in range(self.num_bodies):
-            ax, ay = super().calculate_acceleration(i)
+            ax, ay = calculate_acceleration_helper((self.positions, self.masses, self.G, self.softening, i))
             self.accelerations[i, 0] += self.xp.sum(ax)
             self.accelerations[i, 1] += self.xp.sum(ay)
 

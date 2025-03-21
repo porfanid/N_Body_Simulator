@@ -1,4 +1,18 @@
 from PySide6.QtGui import QColor
+from numpy import array, sum
+
+def calculate_acceleration_helper(args):
+    positions, masses, G, softening, i = args
+    dx = positions[:, 0] - positions[i, 0]
+    dy = positions[:, 1] - positions[i, 1]
+
+    inv_r3 = (dx ** 2 + dy ** 2 + softening ** 2) ** (-1.5)
+    inv_r3[i] = 0
+
+    ax = G * dx * inv_r3 * masses
+    ay = G * dy * inv_r3 * masses
+
+    return array([sum(ax), sum(ay)])
 
 class BaseNBodySimulation:
     """Base class for handling the N-body physics simulation"""
@@ -64,15 +78,3 @@ class BaseNBodySimulation:
                 dy = self.positions[i, 1] - self.positions[j, 1]
                 r = self.xp.sqrt(dx ** 2 + dy ** 2 + self.softening ** 2)
                 self.potential_energy -= self.G * self.masses[i] * self.masses[j] / r
-
-
-    def calculate_acceleration(self, i):
-        dx = self.positions[:, 0] - self.positions[i, 0]
-        dy = self.positions[:, 1] - self.positions[i, 1]
-
-        inv_r3 = (dx ** 2 + dy ** 2 + self.softening ** 2) ** (-1.5)
-        inv_r3[i] = 0
-
-        ax = self.G * dx * inv_r3 * self.masses
-        ay = self.G * dy * inv_r3 * self.masses
-        return ax, ay

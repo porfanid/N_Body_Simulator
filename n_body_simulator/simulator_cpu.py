@@ -1,4 +1,4 @@
-from .base_simulation import BaseNBodySimulation
+from .base_simulation import BaseNBodySimulation, calculate_acceleration_helper
 import numpy as np
 from multiprocessing import Pool, cpu_count
 
@@ -14,7 +14,9 @@ class NBodySimulation(BaseNBodySimulation):
         self.accelerations[:] = 0
 
         with Pool(processes=cpu_count()) as pool:
-            results = pool.map(self.calculate_acceleration, range(self.num_bodies))
+            results = pool.map(calculate_acceleration_helper,
+                               [(self.positions, self.masses, self.G, self.softening, i)
+                                for i in range(self.num_bodies)])
 
         for i, acc in enumerate(results):
             self.accelerations[i] = acc
