@@ -43,7 +43,10 @@ class MainWindow(QMainWindow):
         body_layout = QHBoxLayout()
         body_layout.addWidget(QLabel("Bodies:"))
         self.body_spinner = QSpinBox()
-        self.body_spinner.setRange(2, 100)
+        if self.simulation_widget.simulation.is_gpu():
+            self.body_spinner.setRange(2, 10000)
+        else:
+            self.body_spinner.setRange(2, 100)
         self.body_spinner.setValue(10)
         self.body_spinner.valueChanged.connect(self.update_body_count)
         body_layout.addWidget(self.body_spinner)

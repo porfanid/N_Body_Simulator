@@ -78,3 +78,6 @@ class BaseNBodySimulation:
                 dy = self.positions[i, 1] - self.positions[j, 1]
                 r = self.xp.sqrt(dx ** 2 + dy ** 2 + self.softening ** 2)
                 self.potential_energy -= self.G * self.masses[i] * self.masses[j] / r
+
+    def is_gpu(self):
+        pass

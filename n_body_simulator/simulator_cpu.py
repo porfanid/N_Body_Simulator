@@ -34,3 +34,6 @@ class NBodySimulation(BaseNBodySimulation):
     def calculate_acceleration(self, i):
         ax, ay = super().calculate_acceleration(i)
         return np.array([np.sum(ax), np.sum(ay)])
+
+    def is_gpu(self):
+        return False

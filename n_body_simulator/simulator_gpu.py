@@ -32,3 +32,6 @@ class NBodySimulation(BaseNBodySimulation):
                 self.trails[i].pop(0)
 
         self.calculate_energy()
+
+    def is_gpu(self):
+        return True
